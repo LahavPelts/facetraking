@@ -85,11 +85,16 @@ def main():
     detector = FaceMeshDetector(maxFaces=2)
     while True:
         success, img = cap.read()
+        if not success:
+            break
         img, faces = detector.findFaceMesh(img)
         if faces:
             print(faces[0])
         cv2.imshow("Image", img)
-        cv2.waitKey(1)
+        if cv2.waitKey(1) == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

@@ -1,44 +1,43 @@
 
 #include <Servo.h>
 Servo servoVer; //Vertical Servo
-Servo servoHor;
-Servo crawler; //Horizontal Servo
+Servo servoHor; //Horizontal Servo
+Servo crawler;
 int x;
 int y;
 int z;
 int prevX;
 int prevY;
-int prevz; 
+int prevZ;
 void setup()
 {
   Serial.begin(9600);
-  servoVer.attach(10); //Attach Vertical Servo to Pin 5
+  servoVer.attach(10); //Attach Vertical Servo to Pin 10
   servoHor.attach(9);
   crawler.attach(6);
-   //Attach Horizontal Servo to Pin 6
   servoVer.write(0);
   servoHor.write(90);
   crawler.write(90);
 }
 void Pos()
 {
-  if(prevX != x || prevY != y || prevz != z )
+  if(prevX != x || prevY != y || prevZ != z)
   {
     int servoX = map(x, 10, 600, 0, 180);
     int servoY = map(y, 10, 300, 0, 60);
-    int servoz = map(y, 10, 300, 0, 90);
+    int servoZ = map(z, 10, 300, 0, 90);
 
-    servoX = min(servoX, 179);
-    servoX = max(servoX, 0);
-    servoY = min(servoY, 60);
-    servoY = max(servoY, 0);
-    servoz = min(servoz, 60);
-    servoz = max(servoz, 0);
-    
-    
+    servoX = constrain(servoX, 0, 179);
+    servoY = constrain(servoY, 0, 60);
+    servoZ = constrain(servoZ, 0, 90);
+
     servoHor.write(servoX);
     servoVer.write(servoY);
-    crawler.write(servoz);
+    crawler.write(servoZ);
+
+    prevX = x;
+    prevY = y;
+    prevZ = z;
   }
 }
 void loop()
@@ -52,16 +51,15 @@ void loop()
       {
         y = Serial.parseInt();
         if(Serial.read() == 'Z')
-    {
-      z = Serial.parseInt();
-       Pos();
+        {
+          z = Serial.parseInt();
+          Pos();
+        }
       }
-      
-    }
-    while(Serial.available() > 0)
-    {
-      Serial.read();
+      while(Serial.available() > 0)
+      {
+        Serial.read();
+      }
     }
   }
-}
 }

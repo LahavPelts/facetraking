@@ -1,48 +1,64 @@
-# facetraking
+# Face Tracking
 
-comands to run the project 
+A computer-only face tracking project using [MediaPipe](https://github.com/google/mediapipe) and [cvzone](https://github.com/cvzone/cvzone) for real-time face detection through a webcam. The app detects your face, draws a bounding box around it, and shows how far it is from the center of the frame (`dx`, `dy`) with a reference crosshair — no external hardware required.
 
-clone the repository with git clone https://github.com/ashurohilla/facetraking.git
+## Setup
 
+Clone the repository:
 
-create a  virtaul enviorment 
+```
+git clone https://github.com/LahavPelts/facetraking.git
+cd facetraking
+```
 
---->   python -m venv env
+Create a virtual environment:
 
----> activate the environment 
+```
+python -m venv env
+```
 
---> cd env 
---> cd scripts
----> activate 
+Activate it:
 
----> cd ..
----> cd ..
- 
- return to the main directory 
- 
-now run 
+- **Windows:** `env\Scripts\activate`
+- **macOS/Linux:** `source env/bin/activate`
 
-pip install  -r requirements.txt
+Install dependencies:
 
-run the tracking.py file 
+```
+pip install -r requirements.txt
+```
 
+## Running
 
+Combined face + hand tracking:
+```
+python main.py
+```
 
+Face mesh only:
+```
+python Facemeshmodule.py
+```
 
-arduino code 
-open the arduino code in arduino ide 
-upload the code 
-   
-connect the usb cable with laptop use the port name 
+Hand tracking only:
+```
+python HandtrackingModule.py
+```
 
-enter the port name in tracking.py to start serial comunication 
+Face + hand tracking with Arduino serial output:
+```
+python trackingwiththreads.py
+```
 
- tracking.py create x , y cordinates of face and pass it to arduino with serial communication 
- arduino read these value and  control the motor to move respectively.
- 
- 
- 
- 
-   
-   
+Press **q** to quit any of the above.
 
+## Other files
+
+- `main.py` — combines face and hand tracking in one script
+- `Facemeshmodule.py` — reusable 468-point face mesh detector class
+- `HandtrackingModule.py` — reusable hand landmark detector class
+- `mesh.py` — minimal face mesh demo using cvzone
+
+## Notes
+
+This project previously sent face position data over serial to an Arduino to drive pan/tilt servos. That hardware dependency has been removed — `dx`/`dy` are now just displayed on screen, but could be repurposed to drive something else (a digital pan/crop, a cursor, etc.) if you want to extend it.
